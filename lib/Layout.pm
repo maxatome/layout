@@ -43,7 +43,7 @@ sub new
 
 =back
 
-=head1 MÉTHODES
+=head1 METHODS
 
 =over 4
 
