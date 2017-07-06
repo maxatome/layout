@@ -86,7 +86,7 @@ sub _recenter_vertically
     # L|   |R
     #  |___|
     #  | V |
-    my $mit;
+    my $tmp_area;
 
     my $big = $self->monitors->big_area;
 
@@ -95,26 +95,25 @@ sub _recenter_vertically
 	or $far->x2 >= $big->x and $far->x2 <= $big->x2)
     {
 	# Take it back vertically
-	$mit = $self->vert->intersect(Area::->new($far->x, $big->y,
-						  $far->width, $big->height));
+	$tmp_area = Area::->new($far->x, $big->y,
+				$far->width, $big->height);
     }
     # On left? (L area)
     elsif ($far->x2 < $big->x)
     {
 	# Take it back vertically with its right border at pos big->x
-	$mit = $self->vert->intersect(Area::->new($big->x - $far->width + 1,
-						  $big->y,
-						  $far->width, $big->height));
+	$tmp_area = Area::->new($big->x - $far->width + 1, $big->y,
+				$far->width, $big->height);
     }
     # On right (R area)
     else
     {
 	# Take it back vertically with its left border at pos big->x2
-	$mit = $self->vert->intersect(Area::->new($big->x2, $big->y,
-						  $far->width, $big->height));
+	$tmp_area = Area::->new($big->x2, $big->y,
+				$far->width, $big->height);
     }
 
-    $mit
+    $self->vert->intersect($tmp_area)
 }
 
 
@@ -134,7 +133,7 @@ sub _recenter_horizontally
     # H|   |H
     # _|___|_
     #    B
-    my $mit;
+    my $tmp_area;
 
     my $big = $self->monitors->big_area;
 
@@ -143,26 +142,25 @@ sub _recenter_horizontally
 	or $far->y2 >= $big->y and $far->y2 <= $big->y2)
     {
 	# Take it back horizontally
-	$mit = $self->horiz->intersect(Area::->new($big->x, $far->y,
-						   $big->width, $far->height));
+	$tmp_area = Area::->new($big->x, $far->y,
+				$big->width, $far->height);
     }
     # On top? (T area)
     elsif ($far->y2 < $big->y)
     {
 	# Take it back horizontally with its bottom border at pos big->y
-	$mit = $self->horiz->intersect(Area::->new($big->x,
-						  $big->y - $far->height + 1,
-						  $big->width, $far->height));
+	$tmp_area = Area::->new($big->x, $big->y - $far->height + 1,
+				$big->width, $far->height);
     }
     # On bottom (B areas)
     else
     {
 	# Take it back horizontally with its top border at pos big->y2
-	$mit = $self->horiz->intersect(Area::->new($big->x, $big->y2,
-						  $big->width, $far->height));
+	$tmp_area = Area::->new($big->x, $big->y2,
+				$big->width, $far->height);
     }
 
-    $mit
+    $self->horiz->intersect($tmp_area)
 }
 
 
