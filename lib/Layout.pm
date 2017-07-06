@@ -147,10 +147,10 @@ sub _recenter_horizontally
 						   $big->width, $far->height));
     }
     # On top? (T area)
-    elsif ($far->x2 < $big->x)
+    elsif ($far->y2 < $big->y)
     {
 	# Take it back horizontally with its bottom border at pos big->y
-	$mit = $self->vert->intersect(Area::->new($big->x,
+	$mit = $self->horiz->intersect(Area::->new($big->x,
 						  $big->y - $far->height + 1,
 						  $big->width, $far->height));
     }
@@ -158,7 +158,7 @@ sub _recenter_horizontally
     else
     {
 	# Take it back horizontally with its top border at pos big->y2
-	$mit = $self->vert->intersect(Area::->new($big->x, $big->y2,
+	$mit = $self->horiz->intersect(Area::->new($big->x, $big->y2,
 						  $big->width, $far->height));
     }
 
