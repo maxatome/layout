@@ -203,7 +203,7 @@ sub best_target
     foreach my $area ($self->areas)
     {
 	my $it = $window->intersect($area);
-	if (not defined $max_area or $it->area > $max_area)
+	if (defined $it and (not defined $max_area or $it->area > $max_area))
 	{
 	    $max_area = $it->area;
 	    $full_area = $area;
