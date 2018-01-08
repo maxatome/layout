@@ -107,9 +107,9 @@ sub vline ($$$)
     my($x, $y1, $y2) = @_;
 
     my $ret;
-    while ($y1++ <= $y2)
+    while ($y1 <= $y2)
     {
-	$ret .= gotoxy($x, $y1) . '|';
+	$ret .= gotoxy($x, $y1++) . '|';
     }
     $ret
 }
