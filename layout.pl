@@ -92,7 +92,7 @@ sub gotoxy ($$)
 {
     my($col, $line) = @_;
 
-    real_gotoxy($col, $line + 3)
+    real_gotoxy($col, $line + 4)
 }
 
 sub hline ($$$)
@@ -132,22 +132,31 @@ sub menu ()
 	    . "$B${U}l${O}eftEdge $B${U}r${O}ightEdge "
 	    . "$B${U}f${O}ull full$B${U}H${O}oriz "
 	    . "full$B${U}V${O}ert monitorF$B${U}u${O}ll\n"
+
+	    . "botto$B${U}m${O}MonEdge to$B${U}p${O}MonEdge "
+	    . "leftMo$B${U}n${O}Edge r$B${U}i${O}ghtMonEdge\n"
+
 	    . "monitorFullH$B${U}o${O}riz monitorFullV$B${U}e${O}rt "
 	    . "Hori$B${U}z${O}Layout VertL$B${U}a${O}yout "
+
 	    . "$B${U}c${O}lear $B${U}q${O}uit: "
 	    . $CEOL;
 
 	chomp(my $resp = <STDIN> // end);
 
 	$resp = lc $resp;
-	return $resp if $resp =~ /^[btlrfhvuoeazcq]\z/;
+	return $resp if $resp =~ /^[btlrfhvumpnioeazcq]\z/;
     }
 }
 
 my %edge_actions = (b => 'Bottom edge',
 		    t => 'Top edge',
 		    l => 'Left edge',
-		    r => 'Right edge');
+		    r => 'Right edge',
+		    m => 'Bottom monitor edge',
+		    p => 'Top monitor edge',
+		    n => 'Left monitor edge',
+		    i => 'Right monitor edge');
 
 my %w_methods = (
     f => { title => 'Full',                    func => 'full' },
@@ -203,25 +212,41 @@ for (;;)
 	if ($choice eq 'b')
 	{
 	    my $y = $layout->find_bottom_edge($window);
-
 	    print hline($big->x, $y, $big->x2);
 	}
 	elsif ($choice eq 't')
 	{
 	    my $y = $layout->find_top_edge($window);
-
 	    print hline($big->x, $y, $big->x2);
 	}
 	elsif ($choice eq 'l')
 	{
 	    my $x = $layout->find_left_edge($window);
-
 	    print vline($x, $big->y, $big->y2);
 	}
 	elsif ($choice eq 'r')
 	{
 	    my $x = $layout->find_right_edge($window);
-
+	    print vline($x, $big->y, $big->y2);
+	}
+	elsif ($choice eq 'm')
+	{
+	    my $y = $layout->find_monitor_bottom_edge($window);
+	    print hline($big->x, $y, $big->x2);
+	}
+	elsif ($choice eq 'p')
+	{
+	    my $y = $layout->find_monitor_top_edge($window);
+	    print hline($big->x, $y, $big->x2);
+	}
+	elsif ($choice eq 'n')
+	{
+	    my $x = $layout->find_monitor_left_edge($window);
+	    print vline($x, $big->y, $big->y2);
+	}
+	elsif ($choice eq 'i')
+	{
+	    my $x = $layout->find_monitor_right_edge($window);
 	    print vline($x, $big->y, $big->y2);
 	}
 

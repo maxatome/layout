@@ -233,7 +233,7 @@ sub find_left_edge
 =item $obj->find_right_edge(AREA)
 
 Return the layout right edge (abscissa) against which I<AREA> (L<Area>
-instance) has to stop to stay visible
+instance) has to stop to stay visible.
 
 =cut
 sub find_right_edge
@@ -249,6 +249,98 @@ sub find_right_edge
     }
 
     min(map { $_->x2 } $mit->areas)
+}
+
+
+=item $obj->find_monitor_bottom_edge(AREA)
+
+Return the closest monitor bottom edge (ordinate) against which
+I<AREA> (L<Area> instance) has to stop to stay visible.
+
+=cut
+sub find_monitor_bottom_edge
+{
+    my($self, $window) = @_;
+
+    my $mit = $self->monitors->intersect($window);
+
+    unless ($mit->num)
+    {
+	# Out of screen, try to recenter the window
+	$mit = $self->_recenter_vertically($window);
+    }
+
+    min(map { $_->y2 > $window->y2 ? $_->y2 : () } $mit->areas)
+	// $self->find_bottom_edge($window) # if window bottom out of screen
+}
+
+
+=item $obj->find_monitor_top_edge(AREA)
+
+Return the closest monitor top edge (ordinate) against which I<AREA>
+(L<Area> instance) has to stop to stay visible.
+
+=cut
+sub find_monitor_top_edge
+{
+    my($self, $window) = @_;
+
+    my $mit = $self->monitors->intersect($window);
+
+    unless ($mit->num)
+    {
+	# Out of screen, try to recenter the window
+	$mit = $self->_recenter_vertically($window);
+    }
+
+    max(map { $_->y < $window->y ? $_->y : () } $mit->areas)
+	// $self->find_top_edge($window) # if window top out of screen
+}
+
+
+=item $obj->find_monitor_left_edge(AREA)
+
+Return the closest monitor left edge (abscissa) against which I<AREA>
+(L<Area> instance) has to stop to stay visible.
+
+=cut
+sub find_monitor_left_edge
+{
+    my($self, $window) = @_;
+
+    my $mit = $self->monitors->intersect($window);
+
+    unless ($mit->num)
+    {
+	# Out of screen, try to recenter the window
+	$mit = $self->_recenter_horizontally($window);
+    }
+
+    max(map { $_->x < $window->x ? $_->x : () } $mit->areas)
+	// $self->find_left_edge($window) # if window left out of screen
+}
+
+
+=item $obj->find_monitor_right_edge(AREA)
+
+Return the closest monitor right edge (abscissa) against which I<AREA>
+(L<Area> instance) has to stop to stay visible.
+
+=cut
+sub find_monitor_right_edge
+{
+    my($self, $window) = @_;
+
+    my $mit = $self->monitors->intersect($window);
+
+    unless ($mit->num)
+    {
+	# Out of screen, try to recenter the window
+	$mit = $self->_recenter_horizontally($window);
+    }
+
+    min(map { $_->x2 > $window->x2 ? $_->x2 : () } $mit->areas)
+	// $self->find_right_edge($window) # if window right out of screen
 }
 
 
